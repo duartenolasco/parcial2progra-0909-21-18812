@@ -3,4 +3,4 @@ project(parcial2progra)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(parcial2progra main.cpp)
+add_executable(parcial2progra crearcantidaddearchivos.cpp)
