@@ -9,31 +9,77 @@
  */
 
 #include <iostream>
+#include <filesystem>
+#include <fstream> 
+#include <windows.h>
 
 using namespace std;
 
-void creararchivos();
+void agregarTexto(int cantidadArchivos, string carpetaDestino) {
+    // Agregar texto a los archivos en la carpeta de destino
+    for (int i = 1; i <= cantidadArchivos; i++) {
+        // Definir el nombre del archivo
+        string nombreArchivo = "file" + to_string(i) + ".txt";
+        string rutaArchivo = carpetaDestino + nombreArchivo;
+
+        // Crear el archivo si no existe
+        if (!filesystem::exists(rutaArchivo)) {
+            ofstream archivos(rutaArchivo);
+            archivos.close();
+        }
+
+        // Abrir el archivo y agregar texto
+        ofstream archivo(rutaArchivo, ios_base::app);
+        for (int j = 1; j <= i; j++) {
+            archivo << "Línea " << j << " del archivo " << nombreArchivo << endl;
+        }
+        archivo.close();
+    }
+
+    // Abrir la carpeta de destino en el explorador de archivos
+    ShellExecute(NULL, "open", carpetaDestino.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+}
+
+void buscarArchivoMasGrande(string carpetaDestino) {
+    int tamanoMaximo = 0;
+    string archivoMasGrande;
+    for (const auto &archivo : filesystem::directory_iterator(carpetaDestino)) {
+        if (filesystem::is_regular_file(archivo)) {
+            int tamanoArchivo = filesystem::file_size(archivo);
+            if (tamanoArchivo > tamanoMaximo) {
+                tamanoMaximo = tamanoArchivo;
+                archivoMasGrande = archivo.path().string();
+            }
+        }
+    }
+    if (tamanoMaximo > 0) {
+        cout << "El archivo mas grande en " << carpetaDestino << " es: " << archivoMasGrande << endl;
+    } else {
+        cout << "No se encontraron archivos en " << carpetaDestino << endl;
+    }
+}
 
 int main() {
+    // Definir directorios de destino
+    string parDir = "C:\\Users\\leste\\OneDrive\\Documentos\\par";
+    string imparDir = "C:\\Users\\leste\\OneDrive\\Escritorio\\impar";
 
-    creararchivos();
+    // Preguntar al usuario cuántos archivos desea crear
+    int cantidadArchivos;
+    cout << "¿Cuántos archivos desea crear?" << endl;
+    cin >> cantidadArchivos;
+
+    // Determinar el directorio de destino según la cantidad de archivos
+    string carpetaDestino;
+    if (cantidadArchivos % 2 == 0) {
+        carpetaDestino = parDir;
+    } else {
+        carpetaDestino = imparDir;
+    }
+
+    // Ejecutar la función agregarTexto y buscarArchivoMasGrande
+    agregarTexto(cantidadArchivos, carpetaDestino);
+    buscarArchivoMasGrande(carpetaDestino);
 
     return 0;
-}
-void creararchivos(){
-    int numero;
-
-    cout<<"Digite un numero: "; cin>>numero;
-
-    if(numero==0){ //esto en dado caso el numero sea 0
-        cout<<"el numero es cero";//el programa me lo dira
-        cout<<"\n 0 archivos es lo mismo que crear 0 archivos";
-    }
-        //y el else aca me funciona que si en dado caso no es 0 me aplique la siguiente caracteristica
-    else if(numero%2==0){//& este se usa para division y nos muestra el residuo y si este residuo es 0 es un numero par
-        cout<<"el numero es par";
-    }
-    else{ //y pues aca ya no es necesario ya que si no es 0 el numero o un numero par
-        cout<<"el numero es impar"; //automaticamente sabremos que es un numero impar
-    }
 }
