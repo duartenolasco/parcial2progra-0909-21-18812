@@ -1,0 +1,3 @@
+C:/Users/leste/Downloads/archivos_de_c++/parcial2progra/cmake-build-debug/CMakeFiles/parcial2progra.dir
+C:/Users/leste/Downloads/archivos_de_c++/parcial2progra/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/leste/Downloads/archivos_de_c++/parcial2progra/cmake-build-debug/CMakeFiles/rebuild_cache.dir
